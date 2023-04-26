@@ -3646,6 +3646,21 @@ template <typename T> uint64x2_t vreinterpretq_u64_f64(T a) { return (uint64x2_t
 
 template <typename T> float64x2_t vreinterpretq_f64_u64(T a) { return (float64x2_t) a; }
 
+// fix rk3588 4.9 gnustl neon compile
+#if EIGEN_OS_ANDROID && defined(RM_ANDROID) && EIGEN_GNUC_AT(4,9)
+template <typename T> float64x2_t vreinterpretq_f64_u32(T a) { return (float64x2_t) a; }
+
+template <typename T> float64x2_t vreinterpretq_f64_s32(T a) { return (float64x2_t) a; }
+
+template <typename T> float64x2_t vreinterpretq_f64_s64(T a) { return (float64x2_t) a; }
+
+template <typename T> int64x2_t vreinterpretq_s64_f64(T a) { return (int64x2_t) a; }
+
+template <typename T> int32x4_t vreinterpretq_s32_f64(T a) { return (int32x4_t) a; }
+
+template <typename T> uint32x4_t vreinterpretq_u32_f64(T a) { return (uint32x4_t) a; }
+#endif
+
 typedef float64x2_t Packet2d;
 typedef float64x1_t Packet1d;
 
