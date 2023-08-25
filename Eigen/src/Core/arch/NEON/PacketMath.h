@@ -3638,27 +3638,21 @@ template<> EIGEN_STRONG_INLINE Packet4bf pnegate<Packet4bf>(const Packet4bf& a)
 
 #if EIGEN_ARCH_ARM64 && !EIGEN_APPLE_DOUBLE_NEON_BUG
 
+#if EIGEN_COMP_GNUC
 // Bug 907: workaround missing declarations of the following two functions in the ADK
 // Defining these functions as templates ensures that if these intrinsics are
 // already defined in arm_neon.h, then our workaround doesn't cause a conflict
 // and has lower priority in overload resolution.
-template <typename T> uint64x2_t vreinterpretq_u64_f64(T a) { return (uint64x2_t) a; }
-
-template <typename T> float64x2_t vreinterpretq_f64_u64(T a) { return (float64x2_t) a; }
-
-// fix rk3588 4.9 gnustl neon compile
-#if EIGEN_OS_ANDROID && defined(RM_ANDROID) && EIGEN_GNUC_AT(4,9)
+#if EIGEN_GNUC_AT_MOST(4, 9)
+template <typename T> float64x2_t vreinterpretq_f64_s64(T a) { return (float64x2_t) a; }
 template <typename T> float64x2_t vreinterpretq_f64_u32(T a) { return (float64x2_t) a; }
-
 template <typename T> float64x2_t vreinterpretq_f64_s32(T a) { return (float64x2_t) a; }
 
-template <typename T> float64x2_t vreinterpretq_f64_s64(T a) { return (float64x2_t) a; }
-
 template <typename T> int64x2_t vreinterpretq_s64_f64(T a) { return (int64x2_t) a; }
-
 template <typename T> int32x4_t vreinterpretq_s32_f64(T a) { return (int32x4_t) a; }
 
 template <typename T> uint32x4_t vreinterpretq_u32_f64(T a) { return (uint32x4_t) a; }
+#endif
 #endif
 
 typedef float64x2_t Packet2d;
